@@ -4,3 +4,6 @@ node_modules/
 data/*
 !data/.gitkeep
 *.log
+
+# Internal sales strategy. This repo is PUBLIC; keep the playbook out of it.
+docs/GUARANTEE.md

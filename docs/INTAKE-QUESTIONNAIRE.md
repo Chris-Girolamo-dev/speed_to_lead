@@ -71,4 +71,21 @@ Defaults below; edit freely or approve as-is. `{{firstName}}` etc. are filled au
 - Do you already have a Twilio account? [ ] Yes [ ] No (we'll create one)
 - Email sending: do you use Google Workspace, Microsoft 365, or something else?
 - Preferred area code for your dedicated SMS number:
+
+## 8. Baseline metrics (used to qualify and measure your guarantee)
+
+These answers set the baseline your results are measured against, so be accurate rather than optimistic. We verify against your CRM at kickoff.
+
 - Roughly how many form submissions do you get per month?
+- When a lead submits your form today, how quickly does someone typically respond?
+  [ ] Under 5 minutes [ ] Under 30 minutes [ ] Within a few hours [ ] Same day [ ] Next business day or later
+- What percentage of form leads does your team actually get on the phone?
+- How many form leads turned into booked sales calls in the last 90 days?
+- Where do booked calls live today? (Calendly, Outlook/Google Calendar, CRM meetings, ...)
+
+The next three are optional but help us quantify what a booked call is worth to your business. Ranges are fine.
+
+- Of the sales calls you book, roughly what fraction become customers? (e.g. 1 in 5)
+- Average value of a new customer engagement in the first year:
+  [ ] Under $100k [ ] $100k-$500k [ ] $500k-$1M [ ] $1M+
+- Typical customer lifetime value, if you track it:
