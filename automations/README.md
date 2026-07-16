@@ -13,13 +13,21 @@ This is an alternative to the Node microservice for pilots. When you upgrade a c
 ## Import it
 
 1. In Make: **Create a new scenario → ... (three dots) → Import Blueprint** → upload `make-speed-to-lead-email.json` (or paste its contents).
-2. **Reconnect the two email modules.** Click each "Send an email" module and select your SMTP/email connection (create one if needed: your Google Workspace, SendGrid, Mailgun, etc.). Connections never travel inside a blueprint, so this step is always required.
-3. **Set the rep's address** in the first email module's "To" field (replace `REP_EMAIL@EXAMPLE.COM`).
-4. **Edit the copy** in both email modules (rep alert + lead follow-up). Put the real brand/rep name in the follow-up. No em dashes.
-5. **Grab the webhook URL** from the first module and use it as the intake endpoint (point the client's form webhook, a Zapier/Make feed, or the email-parse path at it, exactly like `docs/INTAKE-RECIPES.md`).
-6. **Turn the scenario ON** (schedule = immediately, since the webhook is instant).
+2. **Create the webhook.** Click the first module → **Create a webhook** → name it → Save. Make generates a new URL (the blueprint's placeholder hook is intentionally not yours).
+3. **Connect the two email modules.** Click each "Send an email" module and pick your email connection under **Connection** (or **Add** one: Google Restricted for Google Workspace, Microsoft SMTP/IMAP OAuth for 365, or Others (SMTP) for anything else). Connections never travel inside a blueprint, so this is always required. Use the **same** connection on both modules.
+4. **Set the rep's address.** In module 2 ("Instant rep alert") the "To" field ships as the placeholder `REP_EMAIL@EXAMPLE.COM` — replace it with the real alert inbox. **This is the #1 thing people forget**, and a leftover placeholder means the alert silently goes nowhere. (Module 4's "To" is already mapped to `{{1.email}}`, the lead's own address — leave it.)
+5. **Teach the webhook its fields.** Click the webhook → **Redetermine data structure**, then send one sample POST (see Test below) so `firstName / email / etc.` become clickable in the email modules.
+6. **Edit the copy** in both email modules. Put the real brand/rep name in the follow-up. No em dashes.
+7. **Turn the scenario ON** (bottom toggle → "Immediately as data arrives"), and point your intake at the webhook URL (see `docs/INTAKE-RECIPES.md`).
 
-The blueprint is zoned to `us2.make.com` and uses the module versions confirmed in a real Make US account (`email:ActionSendEmail` v7, `util:FunctionSleep` v1). If your org is on a different zone/region and import complains, change the `zone` value at the bottom to match your account (e.g. `us1.make.com`, `eu1.make.com`). If a module still shows "Module Not Found", add that one step by hand (the flow is only four modules) and re-export.
+**Module facts** (from a real working export, in case you rebuild by hand): webhook `gateway:CustomWebHook` v1; email `email:ActionSendEmail` v7 (connection param `account`, type SMTP / Google Restricted / Microsoft SMTP-IMAP OAuth); delay `util:FunctionSleep` v1 with mapper key **`duration`** (seconds as a string, **max 300**, so the 180s / 3-min production delay fits). Zoned to `us2.make.com` — if your org is on another region and import complains, change the `zone` value at the bottom (e.g. `us1.make.com`, `eu1.make.com`).
+
+### Gotchas we hit setting this up live
+
+- **Microsoft 365 "Authenticated SMTP" is often disabled**, which makes the send fail. If a Send Email module errors on auth/SMTP/535: Microsoft 365 Admin Center → Users → the mailbox → Mail → Manage email apps → tick **Authenticated SMTP** → Save (takes a few minutes).
+- **Make queues webhook data and processes it oldest-first.** During testing, an old queued sample can run instead of your newest one (so the follow-up goes to a stale address). Flush the queue by clicking **Run once** until it finds nothing, or just turn the scenario ON so it runs live in order.
+- **Don't add a "Skip" error handler while testing.** It silently swallows failures and makes a broken send look successful. Delete it so errors surface red; add proper (notifying) error handling only once the happy path works.
+- **Deliverability:** the follow-up can land in Gmail's Promotions/Spam. Sending from a domain with SPF/DKIM configured keeps it in the inbox — set those DNS records before a real client relies on it.
 
 ## Test it
 
@@ -31,7 +39,7 @@ curl -X POST "<your-webhook-url>" \
   -d '{"firstName":"Test","lastName":"Lead","company":"Example Co","phone":"5550100001","email":"you@example.com"}'
 ```
 
-Expect the rep alert immediately and the follow-up to your test email ~3 minutes later. The field names (`firstName`, `lastName`, `company`, `phone`, `email`) must match what your intake sends; adjust the mappings in the email modules if the client's form uses different keys.
+Expect the rep alert immediately and the follow-up to the address in the `email` field ~3 minutes later (drop the Sleep `duration` to `10` while testing so you're not waiting). The field names (`firstName`, `lastName`, `company`, `phone`, `email`) must match what your intake sends; adjust the mappings in the email modules if the client's form uses different keys.
 
 ## Optional: time-aware copy (in-hours vs after-hours)
 
