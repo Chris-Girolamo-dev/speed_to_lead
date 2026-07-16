@@ -7,6 +7,8 @@ A productized lead-response service. When a prospect submits the client's websit
 
 Built to be copied per client and deployed for a new client in **5 business days or less**. See `docs/RUNBOOK.md` for the day-by-day playbook.
 
+**New here or non-technical?** Start with `docs/PROCESS-FLOW.md` — a plain-English, diagrammed map of the whole journey from prospect to live.
+
 ## Architecture
 
 ```
