@@ -15,10 +15,18 @@ Everything needed to deploy your speed-to-lead system. Most clients can complete
 
 - URL of the page with your contact/inquiry form:
 - What fields does the form ask for? (or attach a screenshot)
-- What happens today when someone submits it? (email notification, CRM entry, etc. This keeps working unchanged; we run alongside it.)
-- What platform is the site/form built on, if known? (WordPress, Webflow, HubSpot, Squarespace, custom, ...)
+
+**How your form works today (this is the most important section, it decides how we connect):**
+
+- What tool is your contact form built with? (Webflow, WordPress/Gravity Forms, HubSpot, Typeform, Jotform, Squarespace, Wix, custom, ...)
+  [ ] I know: ______________  [ ] Not sure (fill in the next line)
+- If you're not sure, who would know? (name + email of whoever manages your website or marketing tech, e.g. your web developer or agency)
+- When someone submits the form today, do you get an email notification? [ ] Yes [ ] No [ ] Not sure
+  - If yes, which inbox does it land in? (address): ______________
+  - **Please attach one real example of that notification email.** This single artifact usually lets us connect everything without touching your website.
+- Does the submission also go into a CRM or other tool? (This keeps working unchanged; we run alongside it.)
 - Do you have Google Tag Manager on the site? [ ] Yes [ ] No [ ] Not sure
-- Who (if anyone) can make changes to the website?
+- Who (if anyone) can make changes to the website itself?
 
 ## 3. Who gets alerted
 
