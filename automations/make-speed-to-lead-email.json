@@ -1,0 +1,210 @@
+{
+    "name": "Speed-to-Lead (Email pilot)",
+    "flow": [
+        {
+            "id": 1,
+            "module": "gateway:CustomWebHook",
+            "version": 1,
+            "parameters": {
+                "hook": 1000001,
+                "maxResults": 1
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 0,
+                    "name": "Lead intake (webhook)"
+                },
+                "restore": {
+                    "parameters": {
+                        "hook": {
+                            "label": "Speed-to-Lead intake",
+                            "data": {
+                                "editable": "true"
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "hook",
+                        "type": "hook:gateway-webhook",
+                        "label": "Webhook",
+                        "required": true
+                    },
+                    {
+                        "name": "maxResults",
+                        "type": "number",
+                        "label": "Maximum number of results"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 2,
+            "module": "email:ActionSendEmail",
+            "version": 5,
+            "parameters": {},
+            "mapper": {
+                "to": [
+                    "REP_EMAIL@EXAMPLE.COM"
+                ],
+                "cc": [],
+                "bcc": [],
+                "from": "",
+                "replyTo": "",
+                "subject": "HOT LEAD: {{1.firstName}} {{1.lastName}} ({{1.company}})",
+                "contentType": "text",
+                "text": "A new lead just came in:\n\nName: {{1.firstName}} {{1.lastName}}\nCompany: {{1.company}}\nPhone: {{1.phone}}\nEmail: {{1.email}}\n\nTheir follow-up email goes out automatically in 3 minutes.",
+                "priority": "normal",
+                "attachments": [],
+                "headers": []
+            },
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 0,
+                    "name": "Instant rep alert"
+                },
+                "restore": {
+                    "expect": {
+                        "to": {
+                            "mode": "chose"
+                        },
+                        "priority": {
+                            "label": "Normal"
+                        },
+                        "contentType": {
+                            "label": "Text"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "Your SMTP / email connection",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "email"
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:email",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 3,
+            "module": "builtin:Sleep",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "delay": 180
+            },
+            "metadata": {
+                "designer": {
+                    "x": 600,
+                    "y": 0,
+                    "name": "Wait 3 minutes"
+                },
+                "restore": {},
+                "parameters": [
+                    {
+                        "name": "delay",
+                        "type": "uinteger",
+                        "label": "Delay",
+                        "required": true,
+                        "validate": {
+                            "max": 300,
+                            "min": 1
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "id": 4,
+            "module": "email:ActionSendEmail",
+            "version": 5,
+            "parameters": {},
+            "mapper": {
+                "to": [
+                    "{{1.email}}"
+                ],
+                "cc": [],
+                "bcc": [],
+                "from": "",
+                "replyTo": "",
+                "subject": "Re: Your inquiry",
+                "contentType": "text",
+                "text": "Hi {{ifempty(1.firstName; \"there\")}},\n\nJust got your submission on our site. I'm tied up with another client at the moment but I'll reach out personally very shortly.\n\nBest,\nYour Name\nYour Company",
+                "priority": "normal",
+                "attachments": [],
+                "headers": []
+            },
+            "metadata": {
+                "designer": {
+                    "x": 900,
+                    "y": 0,
+                    "name": "Lead follow-up (3 min later)"
+                },
+                "restore": {
+                    "expect": {
+                        "to": {
+                            "mode": "edit"
+                        },
+                        "priority": {
+                            "label": "Normal"
+                        },
+                        "contentType": {
+                            "label": "Text"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "Your SMTP / email connection",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "email"
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:email",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ]
+            }
+        }
+    ],
+    "metadata": {
+        "instant": true,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "us1.make.com"
+    }
+}

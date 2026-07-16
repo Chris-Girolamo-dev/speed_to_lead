@@ -77,6 +77,8 @@ Before Day 1, decide which channel tier this client starts on (questionnaire Sec
 
 Use this to go live in hours instead of days by skipping everything SMS. The service already runs email-only automatically: with no Twilio credentials set, it sends the email alerts and follow-ups and simply skips SMS. "Email-only" is a configuration state, not different code.
 
+> **Even faster, no server:** for a pilot you can skip deploying the Node service entirely and run the whole email-only flow in Make.com. Import `automations/make-speed-to-lead-email.json` (instructions in `automations/README.md`).
+
 - [ ] Skip all Twilio steps (no subaccount, no number, no A2P). Nothing to wait on.
 - [ ] Day 2 SMTP setup still applies: provision email sending from the rep's domain.
 - [ ] Configure `client.config.json` as normal (brand, rep, timezone, hours, field map, message copy). The `leadSms` copy can stay as-is; it just won't be used yet.
