@@ -41,6 +41,13 @@ Make.com works identically (HTTP module instead of Webhooks by Zapier) and its f
 - **Jotform:** Settings -> Integrations -> Webhooks. Sends form-encoded; accepted natively.
 - **HubSpot forms:** Use a HubSpot workflow with a webhook action (Operations Hub), or Zapier's instant HubSpot trigger on free HubSpot tiers.
 - **Contact Form 7 (WordPress):** the "CF7 to Webhook" plugin posts JSON directly.
+- **Formspree:** Form settings -> Plugins -> **Webhook** (paid Professional tier). **Its payload nests the form fields under a `submission` object**, alongside `form` (the form ID) and `keys` (a list of field names):
+  ```json
+  { "form": "xbdndykg",
+    "submission": { "firstName": "...", "lastName": "...", "company": "...", "phone": "...", "email": "..." },
+    "keys": ["firstName", "lastName", "company", "phone", "email"] }
+  ```
+  The Node service's field-mapper flattens this automatically (it matches nested keys). **In a Make/Zapier scenario you must reference the nested path** — e.g. `{{1.submission.email}}`, not `{{1.email}}` — or every field comes back blank. See `automations/README.md` for the exact Make mappings. If Formspree webhooks aren't on the client's plan, use the email-parse path on Formspree's notification email instead (`EMAIL-PARSE-SETUP.md`).
 
 ## Recipe C: JS attach snippet (requires site or GTM access)
 

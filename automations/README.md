@@ -22,6 +22,16 @@ This is an alternative to the Node microservice for pilots. When you upgrade a c
 
 **Module facts** (from a real working export, in case you rebuild by hand): webhook `gateway:CustomWebHook` v1; email `email:ActionSendEmail` v7 (connection param `account`, type SMTP / Google Restricted / Microsoft SMTP-IMAP OAuth); delay `util:FunctionSleep` v1 with mapper key **`duration`** (seconds as a string, **max 300**, so the 180s / 3-min production delay fits). Zoned to `us2.make.com` — if your org is on another region and import complains, change the `zone` value at the bottom (e.g. `us1.make.com`, `eu1.make.com`).
 
+### Feeding it from Formspree
+
+Formspree wraps the form fields inside a **`submission`** object (with `form` and `keys` as siblings), so the webhook's data structure shows only 3 top-level values (`form`, `submission`, `keys`) and won't let you expand `submission` in the mapping panel. **Type the nested references directly** — Make resolves the dot-path at runtime:
+
+- Module 4 To: `{{1.submission.email}}`
+- Module 2 subject/body: `{{1.submission.firstName}}`, `{{1.submission.company}}`, etc.
+- Greeting with fallback: `Hi {{ifempty(1.submission.firstName; "there")}},`
+
+If dot-notation ever fails to resolve, use `{{get(1.submission; "email")}}` instead. A direct webhook/curl that posts flat fields uses `{{1.email}}` (no `submission.`); to support both shapes, wrap them: `{{ifempty(1.submission.email; 1.email)}}`.
+
 ### Gotchas we hit setting this up live
 
 - **Microsoft 365 "Authenticated SMTP" is often disabled**, which makes the send fail. If a Send Email module errors on auth/SMTP/535: Microsoft 365 Admin Center → Users → the mailbox → Mail → Manage email apps → tick **Authenticated SMTP** → Save (takes a few minutes).
