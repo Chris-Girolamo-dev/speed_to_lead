@@ -28,6 +28,15 @@ Everything needed to deploy your speed-to-lead system. Most clients can complete
 - Do you have Google Tag Manager on the site? [ ] Yes [ ] No [ ] Not sure
 - Who (if anyone) can make changes to the website itself?
 
+**How you want to respond to leads:**
+
+- Which channels should the lead's automatic follow-up use?
+  [ ] Text and email (recommended, strongest response rates)
+  [ ] Email only (fastest to launch, no phone setup)
+  [ ] Not sure, advise me
+
+Note: text messaging requires a one-time carrier registration for your business that can take a few days to a few weeks to approve. Email can go live same-day. Many clients launch email-only immediately and switch texting on the moment registration clears, at no extra setup.
+
 ## 3. Who gets alerted
 
 For each business-development rep who should be notified the moment a lead comes in:
