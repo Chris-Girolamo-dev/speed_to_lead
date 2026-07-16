@@ -44,7 +44,7 @@
         {
             "id": 2,
             "module": "email:ActionSendEmail",
-            "version": 5,
+            "version": 7,
             "parameters": {},
             "mapper": {
                 "to": [
@@ -101,7 +101,7 @@
         },
         {
             "id": 3,
-            "module": "builtin:Sleep",
+            "module": "util:FunctionSleep",
             "version": 1,
             "parameters": {},
             "mapper": {
@@ -131,7 +131,7 @@
         {
             "id": 4,
             "module": "email:ActionSendEmail",
-            "version": 5,
+            "version": 7,
             "parameters": {},
             "mapper": {
                 "to": [
@@ -205,6 +205,7 @@
         "designer": {
             "orphans": []
         },
-        "zone": "us1.make.com"
+        "zone": "us2.make.com",
+        "notes": []
     }
 }

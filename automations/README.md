@@ -19,7 +19,7 @@ This is an alternative to the Node microservice for pilots. When you upgrade a c
 5. **Grab the webhook URL** from the first module and use it as the intake endpoint (point the client's form webhook, a Zapier/Make feed, or the email-parse path at it, exactly like `docs/INTAKE-RECIPES.md`).
 6. **Turn the scenario ON** (schedule = immediately, since the webhook is instant).
 
-If the import complains about the `zone` line, delete `"zone": "us1.make.com"` from the bottom of the JSON and re-import. If a module fails to import on your plan, build that one step by hand (the flow is only four steps).
+The blueprint is zoned to `us2.make.com` and uses the module versions confirmed in a real Make US account (`email:ActionSendEmail` v7, `util:FunctionSleep` v1). If your org is on a different zone/region and import complains, change the `zone` value at the bottom to match your account (e.g. `us1.make.com`, `eu1.make.com`). If a module still shows "Module Not Found", add that one step by hand (the flow is only four modules) and re-export.
 
 ## Test it
 
