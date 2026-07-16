@@ -1,0 +1,20 @@
+{
+  "name": "speed-to-lead-template",
+  "version": "1.0.0",
+  "description": "Templated Speed-to-Lead microservice: instant admin alerts plus delayed personalized SMS/email follow-ups for inbound leads",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test:lead": "node scripts/send-test-lead.js",
+    "smoke": "node scripts/smoke-test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "nodemailer": "^6.9.13",
+    "twilio": "^5.0.4"
+  }
+}

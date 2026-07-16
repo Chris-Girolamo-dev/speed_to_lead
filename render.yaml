@@ -1,0 +1,52 @@
+# Render blueprint. Connect the client's repo in the Render dashboard and
+# it picks this file up automatically ("New +" -> "Blueprint").
+#
+# IMPORTANT: the STARTER (paid, ~$7/mo) plan is REQUIRED. The free tier
+# spins the instance down after ~15 minutes of inactivity, which kills
+# pending follow-up timers and adds ~50 seconds of cold start to intakes.
+# That defeats the entire point of speed-to-lead.
+services:
+  - type: web
+    name: speed-to-lead
+    runtime: node
+    plan: starter
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: FOLLOW_UP_DELAY_MS
+        value: "180000"
+      # Secrets: set values in the Render dashboard (sync: false keeps them
+      # out of this file and out of git)
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_FROM_NUMBER
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: SMTP_FROM_EMAIL
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PHONE
+        sync: false
+      - key: INTAKE_TOKEN
+        sync: false
+    # Optional: persistent disk so queued follow-ups and the lead log
+    # survive redeploys (not just restarts). The follow-up window is only
+    # 3 minutes, so the exposure without a disk is small; enable this if
+    # the client wants durable data/leads.jsonl history on the server.
+    # disk:
+    #   name: stl-data
+    #   mountPath: /opt/render/project/src/data
+    #   sizeGB: 1

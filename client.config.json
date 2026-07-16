@@ -1,0 +1,52 @@
+{
+  "client": {
+    "brandName": "SET_ME",
+    "website": "SET_ME",
+    "repName": "SET_ME",
+    "timezone": "America/New_York"
+  },
+  "businessHours": {
+    "startHour": 8,
+    "cutoffHour": 17,
+    "smsQuietEndHour": 21,
+    "smsQuietResumeHour": 8,
+    "workDays": [1, 2, 3, 4, 5]
+  },
+  "intake": {
+    "fieldMap": {
+      "firstName": ["firstName", "first_name", "first-name", "fname", "first"],
+      "lastName": ["lastName", "last_name", "last-name", "lname", "last"],
+      "fullName": ["fullName", "full_name", "full-name", "your-name", "name"],
+      "company": ["company", "organization", "company_name", "company-name", "business"],
+      "phone": ["phone", "phoneNumber", "phone_number", "phone-number", "tel", "mobile", "cell"],
+      "email": ["email", "emailAddress", "email_address", "email-address", "your-email"]
+    }
+  },
+  "cors": {
+    "allowedOrigins": []
+  },
+  "security": {
+    "honeypotField": "company_website",
+    "rateLimit": { "windowMs": 600000, "max": 10 },
+    "maxFieldLength": 500,
+    "maxExtraFields": 20
+  },
+  "queue": {
+    "file": "data/queue.json",
+    "maxLateMs": 86400000
+  },
+  "messages": {
+    "adminSms": "HOT LEAD ALERT! {{firstName}} {{lastName}} from {{company}} just submitted a request on the {{brandName}} site. Phone: {{phone}}. Email: {{email}}.",
+    "adminEmailSubject": "[HOT LEAD] {{firstName}} {{lastName}} from {{company}}",
+    "adminEmailBody": "A new lead just came in:\n\nName: {{firstName}} {{lastName}}\nCompany: {{company}}\nPhone: {{phone}}\nEmail: {{email}}\n\nAdditional form fields:\n{{extras}}",
+    "leadSms": {
+      "inHours": "Hey {{firstName}}, just got your submission on the {{brandName}} site. I'm on a call with another client right now but I'll call you right after. {{repName}}",
+      "afterHours": "Hey {{firstName}}, got your submission on the {{brandName}} site. We're wrapped up for today but I'll reach out first thing next business day. {{repName}}"
+    },
+    "leadEmailSubject": "Re: Your {{brandName}} inquiry",
+    "leadEmailBody": {
+      "inHours": "Hi {{firstName}},\n\nJust got your submission on the {{brandName}} site. I'm on a call with another client right now but I'll call you as soon as I wrap up.\n\nBest,\n{{repName}}\n{{brandName}}",
+      "afterHours": "Hi {{firstName}},\n\nGot your submission on the {{brandName}} site. We're wrapped up for today, but you're first on my list and I'll reach out first thing next business day.\n\nBest,\n{{repName}}\n{{brandName}}"
+    }
+  }
+}

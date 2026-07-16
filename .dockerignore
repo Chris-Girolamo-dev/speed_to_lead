@@ -1,0 +1,10 @@
+node_modules
+.env
+.env.local
+data
+docs
+compliance
+integration-kit
+scripts
+*.md
+.git

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us</title>
+<!--
+  Speed-to-Lead drop-in form
+  ==========================
+  For clients who have NO existing form (or want a dedicated landing page).
+  Self-contained: styles and submit logic are inline. To integrate into an
+  existing page, copy the <style> block, the <form> markup, and the <script>.
+
+  Rebrand by overriding the CSS custom properties in :root below.
+  Configure the endpoint in STL_FORM_CONFIG at the bottom.
+-->
+<style>
+  :root {
+    --stl-accent: #2563eb;        /* buttons, focus rings */
+    --stl-accent-text: #ffffff;   /* text on accent */
+    --stl-ink: #111827;           /* body text */
+    --stl-muted: #6b7280;         /* labels */
+    --stl-bg: #ffffff;            /* form background */
+    --stl-input-bg: #f9fafb;
+    --stl-border: #d1d5db;
+    --stl-error: #dc2626;
+    --stl-success: #16a34a;
+    --stl-radius: 8px;
+    --stl-font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  body { font-family: var(--stl-font); background: #f3f4f6; margin: 0; padding: 2rem 1rem; }
+  .stl-container {
+    max-width: 560px; margin: 0 auto; background: var(--stl-bg);
+    border: 1px solid var(--stl-border); border-radius: var(--stl-radius);
+    padding: 2rem;
+  }
+  .stl-container h2 { margin: 0 0 1.25rem; color: var(--stl-ink); font-size: 1.4rem; }
+  .stl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .stl-group { display: flex; flex-direction: column; }
+  .stl-group.stl-full { grid-column: 1 / -1; }
+  @media (max-width: 480px) { .stl-grid { grid-template-columns: 1fr; } }
+  .stl-label {
+    font-size: 0.8rem; font-weight: 600; color: var(--stl-muted);
+    margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .stl-input {
+    font: inherit; color: var(--stl-ink); background: var(--stl-input-bg);
+    border: 1px solid var(--stl-border); border-radius: var(--stl-radius);
+    padding: 0.65rem 0.8rem; outline: none;
+  }
+  .stl-input:focus { border-color: var(--stl-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--stl-accent) 20%, transparent); }
+  .stl-submit {
+    grid-column: 1 / -1; font: inherit; font-weight: 600;
+    background: var(--stl-accent); color: var(--stl-accent-text);
+    border: none; border-radius: var(--stl-radius); padding: 0.8rem 1rem;
+    cursor: pointer;
+  }
+  .stl-submit:disabled { opacity: 0.6; cursor: default; }
+  .stl-msg { grid-column: 1 / -1; font-size: 0.9rem; min-height: 1.2em; }
+  .stl-msg.stl-success { color: var(--stl-success); }
+  .stl-msg.stl-error { color: var(--stl-error); }
+  /* Honeypot: hidden from humans, present for bots */
+  .stl-hp { position: absolute; left: -9999px; top: -9999px; }
+</style>
+</head>
+<body>
+
+<div class="stl-container">
+  <h2>Request a Consultation</h2>
+  <form id="stl-contact-form" class="stl-grid" novalidate>
+    <div class="stl-group">
+      <label class="stl-label" for="stl-firstName">First name</label>
+      <input class="stl-input" type="text" id="stl-firstName" name="firstName" autocomplete="given-name">
+    </div>
+    <div class="stl-group">
+      <label class="stl-label" for="stl-lastName">Last name</label>
+      <input class="stl-input" type="text" id="stl-lastName" name="lastName" autocomplete="family-name">
+    </div>
+    <div class="stl-group">
+      <label class="stl-label" for="stl-company">Company</label>
+      <input class="stl-input" type="text" id="stl-company" name="company" autocomplete="organization">
+    </div>
+    <div class="stl-group">
+      <label class="stl-label" for="stl-phone">Phone</label>
+      <input class="stl-input" type="tel" id="stl-phone" name="phone" autocomplete="tel">
+    </div>
+    <div class="stl-group stl-full">
+      <label class="stl-label" for="stl-email">Email</label>
+      <input class="stl-input" type="email" id="stl-email" name="email" autocomplete="email">
+    </div>
+    <!-- Honeypot: field name must match security.honeypotField in client.config.json -->
+    <div class="stl-hp" aria-hidden="true">
+      <label for="stl-hp">Company website</label>
+      <input type="text" id="stl-hp" name="company_website" tabindex="-1" autocomplete="off">
+    </div>
+    <button type="submit" class="stl-submit">Submit Request</button>
+    <div id="stl-msg" class="stl-msg" role="status"></div>
+  </form>
+</div>
+
+<script>
+  var STL_FORM_CONFIG = {
+    // Deployed service endpoint. Browser calls are authorized by CORS
+    // origin allowlist, so the token is optional here.
+    apiEndpoint: 'http://localhost:3000/api/leads',
+    messages: {
+      sending: 'Sending...',
+      success: 'Thanks! We will be in touch shortly.',
+      incomplete: 'Please provide an email or phone number so we can reach you.',
+      invalidEmail: 'Please enter a valid email address.',
+      error: 'Something went wrong. Please try again or email us directly.'
+    }
+  };
+
+  (function () {
+    var form = document.getElementById('stl-contact-form');
+    var msg = document.getElementById('stl-msg');
+    if (!form || !msg) return;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      msg.className = 'stl-msg';
+      msg.textContent = '';
+
+      var payload = {};
+      ['firstName', 'lastName', 'company', 'phone', 'email', 'company_website'].forEach(function (name) {
+        var input = form.querySelector('[name="' + name + '"]');
+        if (input && input.value.trim() !== '') payload[name] = input.value.trim();
+      });
+
+      if (!payload.email && !payload.phone) {
+        msg.classList.add('stl-error');
+        msg.textContent = STL_FORM_CONFIG.messages.incomplete;
+        return;
+      }
+      if (payload.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
+        msg.classList.add('stl-error');
+        msg.textContent = STL_FORM_CONFIG.messages.invalidEmail;
+        return;
+      }
+
+      var btn = form.querySelector('.stl-submit');
+      if (btn) btn.disabled = true;
+      msg.textContent = STL_FORM_CONFIG.messages.sending;
+
+      fetch(STL_FORM_CONFIG.apiEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+        .then(function (res) {
+          if (res.ok) {
+            msg.className = 'stl-msg stl-success';
+            msg.textContent = STL_FORM_CONFIG.messages.success;
+            form.reset();
+          } else {
+            msg.className = 'stl-msg stl-error';
+            msg.textContent = STL_FORM_CONFIG.messages.error;
+          }
+        })
+        .catch(function () {
+          msg.className = 'stl-msg stl-error';
+          msg.textContent = STL_FORM_CONFIG.messages.error;
+        })
+        .then(function () {
+          if (btn) btn.disabled = false;
+        });
+    });
+  })();
+</script>
+
+</body>
+</html>
