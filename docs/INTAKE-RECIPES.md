@@ -9,6 +9,8 @@ Content-Type: application/json  (form-encoded also accepted)
 
 Any payload shape works: `intake.fieldMap` in `client.config.json` normalizes it. Pick the recipe matching the client's stack, **most preferred first** (no website access needed at the top).
 
+> **Locked-down client (no website or form-platform access)?** Use the email-parse path: forward their form's notification email to a parser that POSTs here. Full playbook in `EMAIL-PARSE-SETUP.md`.
+
 ## Step 0 for every recipe: capture a sample payload
 
 Before configuring the fieldMap, capture one real submission payload:
